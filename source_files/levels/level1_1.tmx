@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="48" tileheight="48" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="PLAN1" tilewidth="48" tileheight="48" tilecount="384" columns="64">
+  <image source="../../../electroman_remake.v08.17/electroman_remake.v08.17/files/PLAN1.png" width="3072" height="288"/>
+ </tileset>
+ <tileset firstgid="385" name="PLAN2" tilewidth="48" tileheight="48" tilecount="384" columns="64">
+  <image source="../sprites/PLAN2.png" width="3072" height="288"/>
+ </tileset>
+ <layer id="1" name="background" width="13" height="8">
+  <data encoding="csv">
+135,135,135,135,135,135,135,138,135,135,138,135,135,
+135,135,135,135,135,135,135,135,135,135,135,135,135,
+3,7,129,135,135,135,135,135,6,3,3,3,3,
+1,4,131,135,135,138,135,135,9,5,5,13,1,
+1,4,131,135,135,135,135,135,130,132,132,9,5,
+1,4,131,135,135,135,135,135,135,135,135,130,132,
+1,11,3,3,3,3,3,3,3,3,7,129,135,
+1,1,1,1,1,1,1,1,1,1,11,3,3
+</data>
+ </layer>
+ <layer id="2" name="top_texture" width="13" height="8">
+  <data encoding="csv">
+0,0,0,0,0,399,0,0,0,0,0,0,0,
+0,0,0,406,404,410,407,0,0,386,0,0,0,
+0,0,0,400,0,0,399,0,0,627,0,0,0,
+0,0,0,399,0,0,409,403,0,0,0,0,0,
+0,0,0,409,404,407,0,0,0,0,0,0,0,
+0,0,0,394,0,400,0,0,386,0,0,0,0,
+0,0,0,0,0,0,0,0,627,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
