@@ -2,58 +2,57 @@
 #define UNITS_H
 
 #include "bullets.h"
-#include "classes.h"
+#include "base_classes.h"
 #include <QPainter>
 
 
-class Enemy : public Object {
+class Enemy : public Animated_Object {
 protected:
-    int current_image;
-    std::vector<QPixmap*> images;
     int direction;
     bool solid;
 
 public:
     bool is_solid();
-    virtual QPixmap* die();
+    virtual unique_ptr<QPixmap> die();
     virtual void update() = 0;
-    void draw(QPainter* painter) override;
+    virtual void shoot() = 0;
+    void draw(QPainter& painter) override;
 
     Enemy(int x, int y);
-    ~Enemy() override;
+    ~Enemy() override = default;
 };
 
-class Robot : public Enemy {
+class Robot : public Enemy, public I_Movable {
 protected:
-    int frame_count;
     int speed;
     int dx;
-    int** matrix;
-    std::vector<Bullet*>* bullets;
+    shared_ptr<unique_ptr<int[]>[]> matrix;
+    vector<shared_ptr<Bullet>>* bullets;
 
-    void animate();
-    void move();
-    void shoot();
+    void animate() override;
+    bool move(shared_ptr<unique_ptr<int[]>[]>) override;
+    void shoot() override;
 
 public:
     void update() override;
 
-    Robot(int x, int y, int speed, int** matrix, std::vector<Bullet*>* bullets);
-    ~Robot() override;
+    Robot(int x, int y, int speed, shared_ptr<unique_ptr<int[]>[]> matrix, vector<shared_ptr<Bullet>>* bullets);
+    ~Robot() override = default;
 };
 
 class Cannon : public Enemy {
 protected:
-    int frame_count;
-    void shoot();
-    std::vector<Bullet*>* bullets;
+    vector<shared_ptr<Bullet>>* bullets;
+    void shoot() override;
+    void animate() override;
 
 public:
     void update() override;
-    QPixmap* die() override;
+    unique_ptr<QPixmap> die() override;
 
-    Cannon(int x, int y, int direction, std::vector<Bullet*>* bullets);
-    ~Cannon() override;
+
+    Cannon(int x, int y, int direction, vector<shared_ptr<Bullet>>* bullets);
+    ~Cannon() override = default;
 };
 
 #endif // UNITS_H

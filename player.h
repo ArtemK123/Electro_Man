@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "bullets.h"
-#include "classes.h"
+#include "base_classes.h"
 #include <queue>
 #include <QPainter>
 
@@ -15,51 +15,53 @@ struct Pressed_Buttoms
     bool fire = false;
 };
 
-class Animation_Handler {
-public:
+class Player_Animation {
+protected:
     int direction;
-    QPixmap* def_image;
-    std::vector<QPixmap*> images;
-    std::queue<QPixmap*> queue;
-
+    shared_ptr<QPixmap> def_image;
+    vector<shared_ptr<QPixmap>> images;
+    queue<shared_ptr<QPixmap>> queue;
     int current_image;
 
-    QPixmap* getImage();
+public:
+    shared_ptr<QPixmap> getImage();
+    int getDirection();
     void move();
     void rotate();
     void jump();
     void stay();
     void die();
 
-    Animation_Handler();
-    ~Animation_Handler();
+    Player_Animation();
 };
 
 
-class Electro_man : public Object {
+class Electro_man : public Object, public I_Movable {
 private:
     int dx;
     int dy;
     int speed;
     int overlay;
     bool is_jump;
-    int rotation_step;
-    int** matrix;
-    Animation_Handler* animation;
-    std::vector<Bullet*> bullets;
+    int frame_delay;
+    shared_ptr<unique_ptr<int[]>[]> matrix;
+    unique_ptr<Player_Animation> animation;
+    vector<shared_ptr<Bullet>> bullets;
     void shoot();
-    void move();
     void moveBullets();
+    bool move(shared_ptr<unique_ptr<int[]>[]>) override;
 
 public:
-    std::vector<Bullet*>* getBulletsPtr();
-    void draw(QPainter* painter) override;
-    void handleKeys(Pressed_Buttoms* buttoms);
+    vector<shared_ptr<Bullet>>* getBulletsPtr();
+    void draw(QPainter& painter) override;
+    void handleKeys(shared_ptr<Pressed_Buttoms> buttoms);
     void die();
+    void teleportation(int destination_x, int destination_y);
 
-    Electro_man(int x, int y, int speed, int** matrix);
-    ~Electro_man() override;
+    Electro_man(int x, int y, int speed, shared_ptr<unique_ptr<int[]>[]> matrix);
+    ~Electro_man() override = default;
 };
 
 
 #endif // PLAYER_H
+

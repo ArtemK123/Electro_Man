@@ -171,7 +171,7 @@ void Game::checkItems() {
 void Game::checkTeleports() {
     for (auto&& teleport : teleports) {
         if (is_overlaid(electro_man.get(), teleport.get())) {
-            electro_man->teleportation(teleport->destination_x, teleport->destination_y);
+            electro_man->teleportation(teleport->getDestinationX(), teleport->getDestinationY());
             return;
         }
     }

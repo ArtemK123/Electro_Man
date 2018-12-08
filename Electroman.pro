@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,22 +26,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        game.cpp \
-    classes.cpp \
+    main.cpp \
     bullets.cpp \
     enemies.cpp \
-    player.cpp
+    player.cpp \
+    game.cpp \
+    map.cpp \
+    xml.cpp \
+    textures.cpp \
+    base_classes.cpp \
+    items.cpp
 
 HEADERS += \
-        game.h \
-    classes.h \
     bullets.h \
     enemies.h \
-    player.h
+    player.h \
+    game.h \
+    map.h \
+    xml.h \
+    textures.h \
+    base_classes.h \
+    items.h
 
 FORMS += \
-        game.ui
+    game.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -249,3 +258,5 @@ DISTFILES += \
     source_files/sprites/weapon5.png \
     source_files/sprites/weapon5r.png \
     source_files/levels/x1y1.txt
+
+RESOURCES +=
