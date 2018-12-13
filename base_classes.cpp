@@ -10,34 +10,34 @@
 // texture_block = 48 x 48
 
 Object::Object(int x, int y) {
-    this->x = x;
-    this->y = y;
-    this->width = 48;
-    this->height = 48;
+    this->m_x = x;
+    this->m_y = y;
+    this->m_width = 48;
+    this->m_height = 48;
 }
 
 int Object::getX() {
-    return this->x;
+    return this->m_x;
 }
 
 void Object::setX(int val) {
-    this->x = val;
+    this->m_x = val;
 }
 
 int Object::getY() {
-    return this->y;
+    return this->m_y;
 }
 
 void Object::setY(int val) {
-    this->y = val;
+    this->m_y = val;
 }
 
 int Object::getWidth() {
-    return this->width;
+    return this->m_width;
 }
 
 int Object::getHeight() {
-    return this->height;
+    return this->m_height;
 }
 
 Object::~Object() {
@@ -47,31 +47,31 @@ Object::~Object() {
 Animated_Object::Animated_Object(int x, int y)
     : Object(x, y)
 {
-    this->images = vector<unique_ptr<QPixmap>>();
-    this->current_image = 0;
-    this->frame_count = 0;
-    this->period = 0;
+    this->m_images = vector<unique_ptr<QPixmap>>();
+    this->m_current_image = 0;
+    this->m_frame_count = 0;
+    this->m_period = 0;
 }
 
 void Animated_Object::setPeriod(int val) {
-    this->period = val;
+    this->m_period = val;
 }
 
 int Animated_Object::getPeriod() {
-    return this->period;
+    return this->m_period;
 }
 
 void Animated_Object::animate() {
-    if (frame_count == period) {
-        current_image = (current_image == static_cast<int>(images.size()) - 1) ? 0 : current_image + 1;
-        frame_count = 0;
+    if (m_frame_count == m_period) {
+        m_current_image = (m_current_image == static_cast<int>(m_images.size()) - 1) ? 0 : m_current_image + 1;
+        m_frame_count = 0;
     } else {
-        frame_count++;
+        m_frame_count++;
     }
 }
 
 void Animated_Object::draw(QPainter& painter) {
-    painter.drawPixmap(x, 384 - height - y, *images[static_cast<unsigned long long>(current_image)]);
+    painter.drawPixmap(m_x, 384 - m_height - m_y, *m_images[static_cast<unsigned long long>(m_current_image)]);
     animate();
 }
 

@@ -24,20 +24,20 @@ public:
     ~Game() override;
 
 private:
-    unique_ptr<QTimer> timer;
-    const int width = 624;
-    const int height = 384;
-    shared_ptr<unique_ptr<int[]>[]> matrix;
+    unique_ptr<QTimer> m_timer;
+    const int m_width = 624;
+    const int m_height = 384;
+    shared_ptr<unique_ptr<int[]>[]> m_matrix;
     Ui::Game *ui;
-    string map_path;
-    unique_ptr<Electro_man> electro_man;
-    shared_ptr<Pressed_Buttoms> buttoms;
-    vector<unique_ptr<Texture>> textures;
-    vector<unique_ptr<Animated_Texture>> animated_textures;
-    vector<unique_ptr<Ammo>> ammo;
-    vector<unique_ptr<Enemy>> enemies;
-    vector<shared_ptr<Bullet>> enemy_bullets;
-    vector<unique_ptr<Teleport>> teleports;
+    string m_map_path;
+    unique_ptr<Electro_man> m_electro_man;
+    shared_ptr<Pressed_Buttoms> m_buttoms;
+    vector<unique_ptr<Texture>> m_textures;
+    vector<unique_ptr<Animated_Texture>> m_animated_textures;
+    vector<unique_ptr<Ammo>> m_ammo;
+    vector<unique_ptr<Enemy>> m_enemies;
+    vector<shared_ptr<Bullet>> m_enemy_bullets;
+    vector<unique_ptr<Teleport>> m_teleports;
 
     void readTxtMap(string path);
     void readMap(string path);

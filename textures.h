@@ -6,7 +6,7 @@
 
 class Texture : public Object {
 protected:
-    unique_ptr<QPixmap> image;
+    unique_ptr<QPixmap> m_image;
 
 public:
 

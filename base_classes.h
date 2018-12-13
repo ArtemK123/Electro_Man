@@ -10,10 +10,10 @@ static string source_path = "./../Electroman/source_files";
 
 class Object {
 protected:
-    int x;
-    int y;
-    int width;
-    int height;
+    int m_x;
+    int m_y;
+    int m_width;
+    int m_height;
 public:
     int getX();
     int getY();
@@ -43,10 +43,10 @@ public:
 
 class Animated_Object : public Object, public I_Animated {
 protected:
-    vector<unique_ptr<QPixmap>> images;
-    int current_image;
-    int frame_count;
-    int period; // how many frames must be passed before next image
+    vector<unique_ptr<QPixmap>> m_images;
+    int m_current_image;
+    int m_frame_count;
+    int m_period; // how many frames must be passed before next image
 
 public:
     void setPeriod(int val);

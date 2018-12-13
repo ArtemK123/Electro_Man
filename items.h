@@ -11,15 +11,13 @@ public:
 
 class Teleport : public Animated_Object {
 protected:
-    int destination_x;
-    int destination_y;
+    int m_destination_x;
+    int m_destination_y;
 
 public:
     int getDestinationX();
     int getDestinationY();
     void setDestionation(int x, int y);
-
-
 
     Teleport(int x, int y, int destination_x, int destination_y);
     ~Teleport() override;

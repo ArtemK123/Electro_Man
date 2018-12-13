@@ -15,60 +15,60 @@ Game::Game(QWidget *parent) :
     ui->setupUi(this);
 
     this->setFixedSize(624, 384);
-    timer = unique_ptr<QTimer>(new QTimer());
-    connect(timer.get(), SIGNAL(timeout()), this, SLOT(timerTick()));
-    timer->start(30);
-    buttoms = shared_ptr<Pressed_Buttoms>(new Pressed_Buttoms());
-    this->map_path = source_path + "/levels/level1_1.tmx";
-    matrix = shared_ptr<unique_ptr<int[]>[]>(new unique_ptr<int[]>[static_cast<unsigned long long>(width)]);
-    for (int i = 0; i < width; i++) {
-        matrix[i] = unique_ptr<int[]>(new int[static_cast<unsigned long long>(height)]);
-        for (int j = 0; j < height; j++) {
-            matrix[i][static_cast<unsigned long long>(j)] = 0;
+    m_timer = unique_ptr<QTimer>(new QTimer());
+    connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(timerTick()));
+    m_timer->start(30);
+    m_buttoms = shared_ptr<Pressed_Buttoms>(new Pressed_Buttoms());
+    this->m_map_path = source_path + "/levels/level1_1.tmx";
+    m_matrix = shared_ptr<unique_ptr<int[]>[]>(new unique_ptr<int[]>[static_cast<size_t>(m_width)]);
+    for (int i = 0; i < m_width; i++) {
+        m_matrix[i] = unique_ptr<int[]>(new int[static_cast<size_t>(m_height)]);
+        for (int j = 0; j < m_height; j++) {
+            m_matrix[i][static_cast<size_t>(j)] = 0;
         }
     }
 
-    enemy_bullets = vector<shared_ptr<Bullet>>();
-    ammo = vector<unique_ptr<Ammo>>();
-    ammo.push_back(unique_ptr<Ammo>(new Ammo(6 * 48, 2 * 48)));
-    textures = vector<unique_ptr<Texture>>();
-    animated_textures = vector<unique_ptr<Animated_Texture>>();
+    m_enemy_bullets = vector<shared_ptr<Bullet>>();
+    m_ammo = vector<unique_ptr<Ammo>>();
+    m_ammo.push_back(unique_ptr<Ammo>(new Ammo(6 * 48, 2 * 48)));
+    m_textures = vector<unique_ptr<Texture>>();
+    m_animated_textures = vector<unique_ptr<Animated_Texture>>();
     vector<QPixmap> vect;
     vect.push_back(QPixmap((source_path + "/sprites/monsters/eb_migalka1a.png").c_str()));
     vect.push_back(QPixmap((source_path + "/sprites/monsters/eb_migalka1b.png").c_str()));
     vect.push_back(QPixmap((source_path + "/sprites/monsters/eb_migalka2a.png").c_str()));
-    animated_textures.push_back(unique_ptr<Animated_Texture>(new Animated_Texture(0, 6 * 48, vect)));
-    enemies = vector<unique_ptr<Enemy>>();
-    enemies.push_back(unique_ptr<Enemy>(new Robot(10 * 48, 6 * 48, 5, matrix, &enemy_bullets)));
-    enemies.push_back(unique_ptr<Enemy>(new Cannon(3 * 48, 7 * 48, 270, &enemy_bullets)));
-    teleports.push_back(unique_ptr<Teleport>(new Teleport(9 * 48, 2 * 48, 9 * 48, 6 * 48)));
-    teleports.push_back(unique_ptr<Teleport>(new Teleport(9 * 48, 6 * 48, 9 * 48, 2 * 48)));
+    m_animated_textures.push_back(unique_ptr<Animated_Texture>(new Animated_Texture(0, 6 * 48, vect)));
+    m_enemies = vector<unique_ptr<Enemy>>();
+    m_enemies.push_back(unique_ptr<Enemy>(new Robot(10 * 48, 6 * 48, 5, m_matrix, &m_enemy_bullets)));
+    m_enemies.push_back(unique_ptr<Enemy>(new Cannon(3 * 48, 7 * 48, 270, &m_enemy_bullets)));
+    m_teleports.push_back(unique_ptr<Teleport>(new Teleport(9 * 48, 2 * 48, 9 * 48, 6 * 48)));
+    m_teleports.push_back(unique_ptr<Teleport>(new Teleport(9 * 48, 6 * 48, 9 * 48, 2 * 48)));
 
-    electro_man = unique_ptr<Electro_man>(new Electro_man(3 * 48, 2 * 48 + 10, 8, matrix));
+    m_electro_man = unique_ptr<Electro_man>(new Electro_man(3 * 48, 2 * 48 + 10, 8, m_matrix));
 
-    this->readMap(map_path);
+    this->readMap(m_map_path);
 }
 
 void Game::readMap(string path) {
     vector<shared_ptr<Layer>> layers = Parser::parse_layers(QString(path.c_str()));
     for (int k = 0; k < static_cast<int>(layers.size()); k++) {
-        shared_ptr<Layer> layer = layers[static_cast<unsigned long long>(k)];
-        string path = map_path + "/../" + layer->path;
+        shared_ptr<Layer> layer = layers[static_cast<size_t>(k)];
+        string path = m_map_path + "/../" + layer->path;
         QPixmap sprite_sheet = QPixmap(path.c_str());
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 13; x++) {
-                int type = layer->data[static_cast<unsigned long long>((7 - y) * 13 + x)] - layer->firstgid;
+                int type = layer->data[static_cast<size_t>((7 - y) * 13 + x)] - layer->firstgid;
                 if (type >= 0) {
                     int sprite_x = type % layer->sheet_columns;
                     int sprite_y = type / layer->sheet_columns;
                     if (k == 0 && type < 12) {
                         for (int i = 0; i < 48; i++) {
                             for (int j = 0; j < 48; j++) {
-                                matrix[x * 48 + i][static_cast<unsigned long long>(y * 48 + j)] = 1;
+                                m_matrix[x * 48 + i][static_cast<size_t>(y * 48 + j)] = 1;
                             }
                         }
                     }
-                    textures.push_back(unique_ptr<Texture>
+                    m_textures.push_back(unique_ptr<Texture>
                                        (new Texture(x * 48, y * 48, sprite_sheet.copy(sprite_x * 48, sprite_y * 48, 48, 48))));
                 }
             }
@@ -91,98 +91,98 @@ bool Game::is_overlaid(Object* a, Object* b) {
 
 
 void Game::checkHits() {
-    for (int i = 0; i < static_cast<int>(enemy_bullets.size()); i++)
+    for (int i = 0; i < static_cast<int>(m_enemy_bullets.size()); i++)
     {
-        shared_ptr<Bullet>& bullet = enemy_bullets[static_cast<unsigned long long>(i)];
-        if (is_overlaid(bullet.get(), electro_man.get()))
+        shared_ptr<Bullet>& bullet = m_enemy_bullets[static_cast<size_t>(i)];
+        if (is_overlaid(bullet.get(), m_electro_man.get()))
         {
-            enemy_bullets.erase(enemy_bullets.begin() + i);
-            electro_man->die();
+            m_enemy_bullets.erase(m_enemy_bullets.begin() + i);
+            m_electro_man->die();
             i--;
         }
     }
-    vector<shared_ptr<Bullet>>* player_bullets = electro_man->getBulletsPtr();
+    vector<shared_ptr<Bullet>>* player_bullets = m_electro_man->getBulletsPtr();
     for (int i = 0; i < static_cast<int>(player_bullets->size()); i++) {
-        shared_ptr<Bullet>& bullet = (*player_bullets)[static_cast<unsigned long long>(i)];
-        for (int j = 0; j < static_cast<int>(enemies.size()); j++) {
-            unique_ptr<Enemy>& enemy = enemies[static_cast<unsigned long long>(j)];
+        shared_ptr<Bullet>& bullet = (*player_bullets)[static_cast<size_t>(i)];
+        for (int j = 0; j < static_cast<int>(m_enemies.size()); j++) {
+            unique_ptr<Enemy>& enemy = m_enemies[static_cast<size_t>(j)];
             if (is_overlaid(bullet.get(), enemy.get()))
             {
                 unique_ptr<QPixmap> dead_texture = enemy->die();
                // dead texture can be nullptr
                 if (dead_texture != nullptr) {
                     //textures.push_back(new Texture(enemy->getX(), enemy->getY(), dead_texture, 0, 0));
-                    textures.push_back(unique_ptr<Texture>(new Texture(enemy->getX(), enemy->getY(), *dead_texture)));
+                    m_textures.push_back(unique_ptr<Texture>(new Texture(enemy->getX(), enemy->getY(), *dead_texture)));
                 }
                 player_bullets->erase(player_bullets->begin() + i);
-                enemies.erase(enemies.begin() + static_cast<long long>(j));
+                m_enemies.erase(m_enemies.begin() + static_cast<long long>(j));
                 i--;
                 break;
             }
         }
 
-        for (int j = 0; j < static_cast<int>(animated_textures.size()); j++) {
-            unique_ptr<Animated_Texture>& animated_texture = animated_textures[static_cast<unsigned long long>(j)];
+        for (int j = 0; j < static_cast<int>(m_animated_textures.size()); j++) {
+            unique_ptr<Animated_Texture>& animated_texture = m_animated_textures[static_cast<size_t>(j)];
             if (is_overlaid(bullet.get(), animated_texture.get()))
             {
                 unique_ptr<QPixmap> dead_texture = animated_texture->destroy();
                // dead texture can be nullptr
                 if (dead_texture != nullptr) {
-                    textures.push_back(unique_ptr<Texture>(new Texture(animated_texture->getX(), animated_texture->getY(), *dead_texture)));
+                    m_textures.push_back(unique_ptr<Texture>(new Texture(animated_texture->getX(), animated_texture->getY(), *dead_texture)));
                 }
                 player_bullets->erase(player_bullets->begin() + i);
-                animated_textures.erase(animated_textures.begin() + static_cast<long long>(j));
+                m_animated_textures.erase(m_animated_textures.begin() + static_cast<long long>(j));
                 i--;
                 break;
             }
         }
     }
 
-    for (int i = 0; i < static_cast<int>(enemies.size()); i++)
+    for (int i = 0; i < static_cast<int>(m_enemies.size()); i++)
     {
-        unique_ptr<Enemy>& enemy = enemies[static_cast<unsigned long long>(i)];
-        if (is_overlaid(enemy.get(), electro_man.get()) && enemy->is_solid())
+        unique_ptr<Enemy>& enemy = m_enemies[static_cast<size_t>(i)];
+        if (is_overlaid(enemy.get(), m_electro_man.get()) && enemy->is_solid())
         {
-            electro_man->die();
+            m_electro_man->die();
         }
     }
 }
 
 void Game::moveBullets() {
-    for (int i = 0; i < static_cast<int>(enemy_bullets.size()); i++) {
-        if (!enemy_bullets[static_cast<unsigned long long>(i)]->move(matrix)) {
-            enemy_bullets.erase(enemy_bullets.begin() + i);
+    for (int i = 0; i < static_cast<int>(m_enemy_bullets.size()); i++) {
+        if (!m_enemy_bullets[static_cast<size_t>(i)]->move(m_matrix)) {
+            m_enemy_bullets.erase(m_enemy_bullets.begin() + i);
             i--;
         }
     }
 }
 
 void Game::checkItems() {
-    for (int i = 0; i < static_cast<int>(ammo.size()); i++)
+    for (int i = 0; i < static_cast<int>(m_ammo.size()); i++)
     {
-        unique_ptr<Ammo>& item = ammo[static_cast<unsigned long long>(i)];
-        if (is_overlaid(item.get(), electro_man.get())) {
-            ammo.erase(ammo.begin() + i);
+        unique_ptr<Ammo>& item = m_ammo[static_cast<size_t>(i)];
+        if (is_overlaid(item.get(), m_electro_man.get())) {
+            m_ammo.erase(m_ammo.begin() + i);
             i--;
         }
     }
 }
 
 void Game::checkTeleports() {
-    for (auto&& teleport : teleports) {
-        if (is_overlaid(electro_man.get(), teleport.get())) {
-            electro_man->teleportation(teleport->destination_x, teleport->destination_y);
+    for (auto&& teleport : m_teleports) {
+        if (is_overlaid(m_electro_man.get(), teleport.get())) {
+            m_electro_man->teleportation(teleport->getDestinationX(), teleport->getDestinationY());
             return;
         }
     }
 }
 
 void Game::timerTick() {
-    electro_man->handleKeys(buttoms);
-    for (auto&& enemy : enemies) {
+    m_electro_man->handleKeys(m_buttoms);
+    for (auto&& enemy : m_enemies) {
         enemy->update();
     }
-    if (buttoms->s) {
+    if (m_buttoms->s) {
         checkTeleports();
     }
     moveBullets();
@@ -193,48 +193,48 @@ void Game::timerTick() {
 
 void Game::paintEvent(QPaintEvent* ) {
     QPainter painter(this);
-    for (auto&& texture : textures) {
+    for (auto&& texture : m_textures) {
         texture->draw(painter);
     }
-    for (auto&& texture : animated_textures) {
+    for (auto&& texture : m_animated_textures) {
         texture->draw(painter);
     }
-    for (auto&& teleport : teleports) {
+    for (auto&& teleport : m_teleports) {
         teleport->draw(painter);
     }
-    for (auto&& enemy : enemies) {
+    for (auto&& enemy : m_enemies) {
         enemy->draw(painter);
     }
-    for (auto&& bullet : enemy_bullets) {
+    for (auto&& bullet : m_enemy_bullets) {
         bullet->draw(painter);
     }
-    for (auto&& item : ammo) {
+    for (auto&& item : m_ammo) {
         item->draw(painter);
     }
-    electro_man->draw(painter);
+    m_electro_man->draw(painter);
 }
 
 void Game::keyPressEvent(QKeyEvent* e) {
     switch (e->key())
     {
     case (Qt::Key_W): {
-        buttoms->w = true;
+        m_buttoms->w = true;
         break;
     }
     case (Qt::Key_S): {
-        buttoms->s = true;
+        m_buttoms->s = true;
         break;
     }
     case (Qt::Key_A): {
-        buttoms->a = true;
+        m_buttoms->a = true;
         break;
     }
     case (Qt::Key_D): {
-        buttoms->d = true;
+        m_buttoms->d = true;
         break;
     }
     case (Qt::Key_Space): {
-        buttoms->fire = true;
+        m_buttoms->fire = true;
         break;
     }
     }
@@ -244,23 +244,23 @@ void Game::keyReleaseEvent(QKeyEvent* e) {
     switch (e->key())
     {
     case (Qt::Key_W): {
-        buttoms->w = false;
+        m_buttoms->w = false;
         break;
     }
     case (Qt::Key_S): {
-        buttoms->s = false;
+        m_buttoms->s = false;
         break;
     }
     case (Qt::Key_A): {
-        buttoms->a = false;
+        m_buttoms->a = false;
         break;
     }
     case (Qt::Key_D): {
-        buttoms->d = false;
+        m_buttoms->d = false;
         break;
     }
     case (Qt::Key_Space): {
-        buttoms->fire = false;
+        m_buttoms->fire = false;
         break;
     }
     }

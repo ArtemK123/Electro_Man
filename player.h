@@ -17,11 +17,11 @@ struct Pressed_Buttoms
 
 class Player_Animation {
 protected:
-    int direction;
-    shared_ptr<QPixmap> def_image;
-    vector<shared_ptr<QPixmap>> images;
-    queue<shared_ptr<QPixmap>> queue;
-    int current_image;
+    int m_direction;
+    shared_ptr<QPixmap> m_def_image;
+    vector<shared_ptr<QPixmap>> m_images;
+    queue<shared_ptr<QPixmap>> m_queue;
+    int m_current_image;
 
 public:
     shared_ptr<QPixmap> getImage();
@@ -38,15 +38,15 @@ public:
 
 class Electro_man : public Object, public I_Movable {
 private:
-    int dx;
-    int dy;
-    int speed;
-    int overlay;
-    bool is_jump;
-    int frame_delay;
-    shared_ptr<unique_ptr<int[]>[]> matrix;
-    unique_ptr<Player_Animation> animation;
-    vector<shared_ptr<Bullet>> bullets;
+    int m_dx;
+    int m_dy;
+    int m_speed;
+    int m_overlay;
+    bool m_is_jump;
+    int m_frame_delay;
+    shared_ptr<unique_ptr<int[]>[]> m_matrix;
+    unique_ptr<Player_Animation> m_animation;
+    vector<shared_ptr<Bullet>> m_bullets;
     void shoot();
     void moveBullets();
     bool move(shared_ptr<unique_ptr<int[]>[]>) override;

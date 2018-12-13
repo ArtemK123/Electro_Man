@@ -6,8 +6,8 @@
 
 class Bullet : public Animated_Object, public I_Movable {
 protected:
-    int direction;
-    int speed;
+    int m_direction;
+    int m_speed;
 
 public:
     bool move(shared_ptr<unique_ptr<int[]>[]> matrix) override;

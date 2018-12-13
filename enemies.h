@@ -8,8 +8,8 @@
 
 class Enemy : public Animated_Object {
 protected:
-    int direction;
-    bool solid;
+    int m_direction;
+    bool m_solid;
 
 public:
     bool is_solid();
@@ -24,10 +24,10 @@ public:
 
 class Robot : public Enemy, public I_Movable {
 protected:
-    int speed;
-    int dx;
-    shared_ptr<unique_ptr<int[]>[]> matrix;
-    vector<shared_ptr<Bullet>>* bullets;
+    int m_speed;
+    int m_dx;
+    shared_ptr<unique_ptr<int[]>[]> m_matrix;
+    vector<shared_ptr<Bullet>>* m_bullets;
 
     void animate() override;
     bool move(shared_ptr<unique_ptr<int[]>[]>) override;
@@ -42,7 +42,7 @@ public:
 
 class Cannon : public Enemy {
 protected:
-    vector<shared_ptr<Bullet>>* bullets;
+    vector<shared_ptr<Bullet>>* m_bullets;
     void shoot() override;
     void animate() override;
 
