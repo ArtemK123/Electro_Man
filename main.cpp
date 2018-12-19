@@ -1,11 +1,17 @@
-#include "game.h"
+#include "window.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Game w;
-    w.show();
+    try
+    {
+        QApplication a(argc, argv);
+        Window w;
+        w.show();
 
-    return a.exec();
+        return a.exec();
+
+    } catch(string e) {
+        cout<<"Error: "<<e<<endl;
+    }
 }

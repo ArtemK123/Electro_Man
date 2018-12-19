@@ -4,27 +4,17 @@
 #include "base_classes.h"
 #include <QPainter>
 
-class Texture : public Object {
-protected:
-    unique_ptr<QPixmap> m_image;
-
+class Texture : public Drawable_Object {
 public:
-
-    void draw(QPainter& painter) override;
-
     Texture(int x, int y, QPixmap image);
-    ~Texture() override = default;
+    void draw(QPainter& painter) override;
+    ~Texture() override;
 };
 
-class Animated_Texture : public Animated_Object {
-protected:
-
+class Animated_Texture : public Animated_Object, public Destroyable_Object {
 public:
-    unique_ptr<QPixmap> destroy();
-    void draw(QPainter& painter) override;
-    Animated_Texture(int x, int y, vector<QPixmap> images);
+    Animated_Texture(int x, int y, vector<QPixmap> images, QPixmap destroyed_image);
     ~Animated_Texture() override;
 };
-
 
 #endif // TEXTURES_H

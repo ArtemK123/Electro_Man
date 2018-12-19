@@ -5,8 +5,9 @@
 #include "base_classes.h"
 #include <queue>
 #include <QPainter>
+#include "unit.h"
 
-struct Pressed_Buttoms
+struct Pressed_Buttons
 {
     bool w = false;
     bool a = false;
@@ -31,37 +32,42 @@ public:
     void jump();
     void stay();
     void die();
+    void teleport();
 
     Player_Animation();
 };
 
-
-class Electro_man : public Object, public I_Movable {
+class Electro_man : public Movable_Object, public Shooting_Object, public IDrawable, public IInput_Handler, public ILogic {
 private:
-    int m_dx;
-    int m_dy;
-    int m_speed;
     int m_overlay;
+    unique_ptr<Player_Animation> m_animation;
+    shared_ptr<Matrix> m_matrix;
+    int m_speed;
+    shared_ptr<Pressed_Buttons> m_buttons;
+
     bool m_is_jump;
     int m_frame_delay;
-    shared_ptr<unique_ptr<int[]>[]> m_matrix;
-    unique_ptr<Player_Animation> m_animation;
-    vector<shared_ptr<Bullet>> m_bullets;
-    void shoot();
-    void moveBullets();
-    bool move(shared_ptr<unique_ptr<int[]>[]>) override;
+    shared_ptr<Bullet_Manager> m_bullets;
+    void moveBack() override;
+    bool checkMapCollision(Matrix& matrix) override;
+    bool checkFalling(Matrix& matrix);
+    shared_ptr<Bullet> shoot() override;
+
 
 public:
-    vector<shared_ptr<Bullet>>* getBulletsPtr();
     void draw(QPainter& painter) override;
-    void handleKeys(shared_ptr<Pressed_Buttoms> buttoms);
-    void die();
+    void handleKeys(Pressed_Buttons& buttons) override;
     void teleportation(int destination_x, int destination_y);
+    void die();
+    void move() override;
+    void update() override;
 
-    Electro_man(int x, int y, int speed, shared_ptr<unique_ptr<int[]>[]> matrix);
-    ~Electro_man() override = default;
+
+
+
+    Electro_man(int x, int y, int speed, shared_ptr<Matrix> matrix, shared_ptr<Bullet_Manager> bullets, shared_ptr<Pressed_Buttons> buttons);
+    ~Electro_man() override;
 };
-
 
 #endif // PLAYER_H
 

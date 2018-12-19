@@ -1,6 +1,9 @@
 #include "items.h"
 
-Ammo::Ammo(int x, int y) : Animated_Object(x, y) {
+Ammo::Ammo(int x, int y)
+    : Object(x, y),
+    Animated_Object(x, y)
+{
     this->m_images.push_back(unique_ptr<QPixmap>(new QPixmap((source_path + "/sprites/level/energy.png").c_str())));
     this->m_period = 10;
 }
@@ -10,7 +13,8 @@ Ammo::~Ammo() {
 }
 
 Teleport::Teleport(int x, int y, int destination_x, int destination_y)
-    : Animated_Object(x, y)
+    : Object(x, y),
+    Animated_Object(x, y)
 {
     this->m_destination_x = destination_x;
     this->m_destination_y = destination_y;

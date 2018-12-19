@@ -28,28 +28,37 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     bullets.cpp \
-    enemies.cpp \
     player.cpp \
-    game.cpp \
     map.cpp \
     xml.cpp \
     textures.cpp \
     base_classes.cpp \
-    items.cpp
+    items.cpp \
+    window.cpp \
+    game.cpp \
+    matrix.cpp \
+    unit.cpp \
+    robot.cpp \
+    cannon.cpp
 
 HEADERS += \
     bullets.h \
-    enemies.h \
     player.h \
-    game.h \
     map.h \
     xml.h \
     textures.h \
     base_classes.h \
-    items.h
+    items.h \
+    window.h \
+    game.h \
+    interfaces.h \
+    matrix.h \
+    unit.h \
+    robot.h \
+    cannon.h
 
 FORMS += \
-    game.ui
+    window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
